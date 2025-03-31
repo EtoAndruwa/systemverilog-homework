@@ -17,9 +17,6 @@ endmodule
 // Task
 //----------------------------------------------------------------------------
 
-`define true 1
-`define false 0
-
 module or_gate_using_mux
 (
     input  a,

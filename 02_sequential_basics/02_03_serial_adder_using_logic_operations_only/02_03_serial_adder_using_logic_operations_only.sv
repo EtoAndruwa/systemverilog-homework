@@ -17,6 +17,7 @@ module serial_adder
   logic carry;
   wire carry_d;
 
+  // Verilog automatically splits into result and carry.
   assign { carry_d, sum } = a + b + carry;
 
   always_ff @ (posedge clk)
@@ -39,6 +40,19 @@ module serial_adder_using_logic_operations_only
   input  b,
   output sum
 );
+
+    logic carry;
+    logic carry_d;
+
+    assign sum = a ^ b ^ carry;
+    assign carry_d = (a & b) | (carry & (a ^ b));
+
+    always_ff @(posedge clk or posedge rst) begin
+        if (rst)
+            carry <= 1'b0;  // Reset carry to 0
+        else
+            carry <= carry_d;  // Update carry with carry_d
+    end
 
   // Task:
   // Implement a serial adder using only ^ (XOR), | (OR), & (AND), ~ (NOT) bitwise operations.
