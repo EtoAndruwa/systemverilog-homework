@@ -124,6 +124,8 @@ module testbench;
             // to generate a VCD file and analyze it using GTKwave or Surfer
 
             // $dumpvars;
+            $dumpfile("out.vcd");
+            $dumpvars;
         `endif
 
         { serial_valid, serial_data } <= '0;

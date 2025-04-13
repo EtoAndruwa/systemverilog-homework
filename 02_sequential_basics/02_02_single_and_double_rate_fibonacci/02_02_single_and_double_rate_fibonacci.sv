@@ -37,7 +37,6 @@ module fibonacci_2
     else
       { num, num2 } <= { num + num2, num + num2 + num2 };
 
-
   // Task:
   // Implement a module that generates two fibonacci numbers per cycle
 

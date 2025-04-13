@@ -16,19 +16,17 @@ module serial_adder_with_vld
     logic carry;
     logic carry_d;
 
-    assign carry_d = (a & b) | (carry & (a ^ b));
     assign sum = vld ? (a ^ b ^ carry) : sum;
+    assign carry_d = (a & b) | (carry & (a ^ b));
 
     always_ff @(posedge clk or posedge rst) begin
-        if (rst) begin
+        if (rst)
             carry <= 1'b0;
-        end else if (vld) begin
-            if (last) begin
+        else if (vld)
+            if (last)
                 carry <= 1'b0;
-            end else begin
+            else
                 carry <= carry_d;
-            end
-        end
     end
 
 
