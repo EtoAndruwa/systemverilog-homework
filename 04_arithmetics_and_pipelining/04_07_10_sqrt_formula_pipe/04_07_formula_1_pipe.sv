@@ -42,7 +42,6 @@ module formula_1_pipe
     // FPGA-Systems Magazine :: FSM :: Issue ALFA (state_0)
     // You can download this issue from https://fpga-systems.ru/fsm#state_0
 
-    logic [31:0] a_saved, b_saved, c_saved;
     logic [31:0] sqrt_a, sqrt_b, sqrt_c;
     logic isqrt_vld_a, isqrt_vld_b, isqrt_vld_c;
 
@@ -85,7 +84,7 @@ module formula_1_pipe
             res_vld_stage_1 <= 1'b0;
         end else begin
             if (isqrt_vld_a && isqrt_vld_b && isqrt_vld_c) begin
-                res_stage_1 <= sqrt_a + (sqrt_b * sqrt_c);
+                res_stage_1 <= sqrt_a + sqrt_b + sqrt_c;
                 res_vld_stage_1 <= 1'b1;
             end else begin
                 res_vld_stage_1 <= 1'b0;
