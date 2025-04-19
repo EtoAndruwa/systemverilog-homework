@@ -78,8 +78,8 @@ module shift_register_with_valid
     // FPGA-Systems Magazine :: FSM :: Issue ALFA (state_0)
     // You can download this issue from https://fpga-systems.ru/fsm#state_0
 
-    logic [width - 1:0] data [0:depth - 1];
-    logic               vlds [0:depth - 1];
+    logic [width - 1:0] data [0:depth-1];
+    logic               vlds [0:depth-1];
 
     always_ff @(posedge clk or posedge rst) begin
         if (rst) begin

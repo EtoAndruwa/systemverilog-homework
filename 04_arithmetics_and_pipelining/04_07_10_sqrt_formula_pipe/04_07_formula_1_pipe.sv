@@ -50,32 +50,32 @@ module formula_1_pipe
 
     isqrt #(.n_pipe_stages(4)) dd_isqrt_a
     (
-        .clk    (clk        ),
-        .rst    (rst        ),
-        .x_vld  (arg_vld    ),
-        .x      (a          ),
-        .y_vld  (isqrt_vld_a),
-        .y      (sqrt_a     )
+        .clk(clk),
+        .rst(rst),
+        .x_vld(arg_vld),
+        .x(a),
+        .y_vld(isqrt_vld_a),
+        .y(sqrt_a)
     );
 
     isqrt #(.n_pipe_stages(4)) dd_isqrt_b
     (
-        .clk    (clk        ),
-        .rst    (rst        ),
-        .x_vld  (arg_vld    ),
-        .x      (b          ),
-        .y_vld  (isqrt_vld_b),
-        .y      (sqrt_b     )
+        .clk(clk),
+        .rst(rst),
+        .x_vld(arg_vld),
+        .x(b),
+        .y_vld(isqrt_vld_b),
+        .y(sqrt_b)
     );
 
     isqrt #(.n_pipe_stages(4)) dd_isqrt_c
     (
-        .clk    (clk        ),
-        .rst    (rst        ),
-        .x_vld  (arg_vld    ),
-        .x      (c          ),
-        .y_vld  (isqrt_vld_c),
-        .y      (sqrt_c     )
+        .clk(clk),
+        .rst(rst),
+        .x_vld(arg_vld),
+        .x(c),
+        .y_vld(isqrt_vld_c),
+        .y(sqrt_c)
     );
 
     always_ff @(posedge clk or posedge rst) begin

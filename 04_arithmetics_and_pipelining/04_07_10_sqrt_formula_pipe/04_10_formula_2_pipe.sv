@@ -47,12 +47,12 @@ module formula_2_pipe
 
     isqrt #(.n_pipe_stages(4)) dd_isqrt_c
     (
-        .clk    (clk        ),
-        .rst    (rst        ),
-        .x_vld  (arg_vld    ),
-        .x      (c          ),
-        .y_vld  (isqrt_vld_c),
-        .y      (sqrt_c     )
+        .clk(clk),
+        .rst(rst),
+        .x_vld(arg_vld),
+        .x(c),
+        .y_vld(isqrt_vld_c),
+        .y(sqrt_c)
     );
 
     logic [31:0] b_plus_sqrt_c;
@@ -74,12 +74,12 @@ module formula_2_pipe
 
     isqrt #(.n_pipe_stages(4)) dd_isqrt_b
     (
-        .clk    (clk        ),
-        .rst    (rst        ),
-        .x_vld  (b_plus_sqrt_c_vld),
-        .x      (b_plus_sqrt_c    ),
-        .y_vld  (isqrt_vld_b      ),
-        .y      (sqrt_b_plus_sqrt_c)
+        .clk(clk),
+        .rst(rst),
+        .x_vld(b_plus_sqrt_c_vld),
+        .x(b_plus_sqrt_c),
+        .y_vld(isqrt_vld_b),
+        .y(sqrt_b_plus_sqrt_c)
     );
 
     logic [31:0] a_plus_sqrt_b_plus_sqrt_c;
@@ -101,12 +101,12 @@ module formula_2_pipe
 
     isqrt #(.n_pipe_stages(4)) dd_isqrt_a
     (
-        .clk    (clk        ),
-        .rst    (rst        ),
-        .x_vld  (a_plus_sqrt_b_plus_sqrt_c_vld),
-        .x      (a_plus_sqrt_b_plus_sqrt_c    ),
-        .y_vld  (isqrt_vld_a                  ),
-        .y      (sqrt_a_plus_sqrt_b_plus_sqrt_c)
+        .clk(clk),
+        .rst(rst),
+        .x_vld(a_plus_sqrt_b_plus_sqrt_c_vld),
+        .x(a_plus_sqrt_b_plus_sqrt_c),
+        .y_vld(isqrt_vld_a),
+        .y(sqrt_a_plus_sqrt_b_plus_sqrt_c)
     );
 
     logic [31:0] res_stage_final;
@@ -115,10 +115,10 @@ module formula_2_pipe
     always_ff @(posedge clk or posedge rst) begin
         if (rst) begin
             res_stage_final <= 32'b0;
-            res_vld_final <= 1'b0;
+            res_vld_final   <= 1'b0;
         end else begin
             res_stage_final <= sqrt_a_plus_sqrt_b_plus_sqrt_c;
-            res_vld_final <= isqrt_vld_a;
+            res_vld_final   <= isqrt_vld_a;
         end
     end
 

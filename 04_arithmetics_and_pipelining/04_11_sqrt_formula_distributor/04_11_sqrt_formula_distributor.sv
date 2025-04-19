@@ -57,14 +57,14 @@ module sqrt_formula_distributor
     always_ff @(posedge clk or posedge rst) begin
         if (rst) begin
             dispatcher <= 0;
-            vld_in <= '0;
+            vld_in     <= '0;
         end else begin
             vld_in <= '0;
             if (arg_vld) begin
                 for (int i = 0; i < N; i++) begin
                     if (!busy[dispatcher]) begin
-                        vld_in[dispatcher] <= 1;
-                        busy[dispatcher] <= 1;
+                        vld_in[dispatcher]   <= 1;
+                        busy[dispatcher]     <= 1;
                         counters[dispatcher] <= 1;
                         dispatcher <= (dispatcher + 1) % N;
                         break;
@@ -129,17 +129,17 @@ module sqrt_formula_distributor
 
             always_ff @(posedge clk or posedge rst) begin
                 if (rst) begin
-                    busy[i] <= 0;
+                    busy[i]     <= 0;
                     counters[i] <= 0;
                 end else if (res_vld_arr[i]) begin
-                    busy[i] <= 0;
+                    busy[i]     <= 0;
                     counters[i] <= 0;
                 end
             end
         end
     endgenerate
 
-    assign res_vld = |res_vld_arr;
+    assign res_vld = | res_vld_arr;
     assign res = (res_vld_arr[0] && counters[0] == LATENCY) ? res_arr[0] :
                 (res_vld_arr[1] && counters[1] == LATENCY) ? res_arr[1] :
                 (res_vld_arr[2] && counters[2] == LATENCY) ? res_arr[2] :

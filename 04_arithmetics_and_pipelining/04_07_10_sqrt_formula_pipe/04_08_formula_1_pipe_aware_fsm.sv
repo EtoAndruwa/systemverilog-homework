@@ -61,5 +61,126 @@ module formula_1_pipe_aware_fsm
     // FPGA-Systems Magazine :: FSM :: Issue ALFA (state_0)
     // You can download this issue from https://fpga-systems.ru/fsm#state_0
 
+    typedef enum logic [1:0] {
+        IDLE,
+        CALC_A,
+        CALC_B,
+        CALC_C
+    } state_t;
+
+    state_t state, next_state;
+
+    logic [15:0] sqrt_a, sqrt_b, sqrt_c;
+    logic sqrt_a_vld, sqrt_b_vld, sqrt_c_vld;
+
+    logic [31:0] sum_ab, sum_abc;
+    logic sum_ab_vld, sum_abc_vld;
+
+    always_ff @(posedge clk or posedge rst) begin
+        if (rst) begin
+            state <= IDLE;
+        end else begin
+            state <= next_state;
+        end
+    end
+
+    always_comb begin
+        next_state = state;
+        isqrt_x_vld = 1'b0;
+        isqrt_x = '0;
+
+        case (state)
+            IDLE: begin
+                if (arg_vld) begin
+                    next_state = CALC_A;
+                    isqrt_x_vld = 1'b1;
+                    isqrt_x = a;
+                end
+            end
+
+            CALC_A: begin
+                isqrt_x_vld = 1'b1;
+                isqrt_x = b;
+                next_state = CALC_B;
+            end
+
+            CALC_B: begin
+                isqrt_x_vld = 1'b1;
+                isqrt_x = c;
+                next_state = CALC_C;
+            end
+
+            CALC_C: begin
+                if (arg_vld) begin
+                    isqrt_x_vld = 1'b1;
+                    isqrt_x = a;
+                    next_state = CALC_A;
+                end else begin
+                    next_state = IDLE;
+                end
+            end
+        endcase
+    end
+
+    always_ff @(posedge clk or posedge rst) begin
+        if (rst) begin
+            sqrt_a <= '0;
+            sqrt_b <= '0;
+            sqrt_c <= '0;
+            sqrt_a_vld <= 1'b0;
+            sqrt_b_vld <= 1'b0;
+            sqrt_c_vld <= 1'b0;
+        end else begin
+            if (isqrt_y_vld) begin
+                case (state)
+                    CALC_A: begin
+                        sqrt_a <= isqrt_y;
+                        sqrt_a_vld <= 1'b1;
+                    end
+                    CALC_B: begin
+                        sqrt_b <= isqrt_y;
+                        sqrt_b_vld <= 1'b1;
+                    end
+                    CALC_C: begin
+                        sqrt_c <= isqrt_y;
+                        sqrt_c_vld <= 1'b1;
+                    end
+                    default: begin
+                        sqrt_a_vld <= 1'b0;
+                        sqrt_b_vld <= 1'b0;
+                        sqrt_c_vld <= 1'b0;
+                    end
+                endcase
+            end
+        end
+    end
+
+    always_ff @(posedge clk or posedge rst) begin
+        if (rst) begin
+            sum_ab <= '0;
+            sum_abc <= '0;
+            sum_ab_vld <= 1'b0;
+            sum_abc_vld <= 1'b0;
+            res <= '0;
+            res_vld <= 1'b0;
+        end else begin
+            if (sqrt_a_vld && sqrt_b_vld) begin
+                sum_ab <= sqrt_a + sqrt_b;
+                sum_ab_vld <= 1'b1;
+            end else begin
+                sum_ab_vld <= 1'b0;
+            end
+
+            if (sum_ab_vld && sqrt_c_vld) begin
+                sum_abc <= sum_ab + sqrt_c;
+                sum_abc_vld <= 1'b1;
+            end else begin
+                sum_abc_vld <= 1'b0;
+            end
+
+            res <= sum_abc;
+            res_vld <= sum_abc_vld;
+        end
+    end
 
 endmodule
